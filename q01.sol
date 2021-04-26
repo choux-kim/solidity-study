@@ -18,13 +18,16 @@ contract MyToken {
         decimals = _decimals;
         balanceOf[msg.sender] = _supply * 10 ** decimals;
         totalSupply = _supply * 10 ** decimals;
+        // (a) //
         owner = msg.sender;
     }
     
+    // (b) //
     function blacklisting(address _addr) onlyOwner public {
         blackList[_addr] = 1;
     }
     
+    // (b) //
     function deleteFromBlacklist(address _addr) onlyOwner public {
         blackList[_addr] = 0;
     }
@@ -40,11 +43,16 @@ contract MyToken {
         if (balanceOf[msg.sender] < _value) { revert(); }
         if (balanceOf[_to] + _value < balanceOf[_to]) { revert(); }
         
+        // (c) //
         if (blackList[msg.sender] > 0) { revert(); }
+        
+        // (c) //
         else if (blackList[_to] > 0) { revert(); }
+        
         else {
             uint256 cashback = 0;
             if (cashbackRate[_to] > 0) {
+                // (d) //
                 cashback = uint256(cashbackRate[_to]) * (_value / 100);
             }
             
